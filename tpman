@@ -1,0 +1,89 @@
+#!/bin/bash
+# Igor Fagundes [Ifaresi]
+
+mode=$1
+config_path=~/.tpmanrc
+
+# "root" mode:
+if [[ ! -z $mode && $mode == "-r" ]]; then
+	# config the root directory and the config file
+	root_path=$2
+	if [ ! -z $root_path ]; then
+		root_path_subdirs=$(ls $root_path | cat)
+		j=1
+		echo "# tpman TPs directories" > $config_path
+		IFS=$'\n'
+		for i in $root_path_subdirs; do
+			# getting the TPs subdirectories and write on config file
+			echo "!$j=${root_path}/'$i'" >> $config_path
+			j=$(( $j+1 ))
+		done
+	fi
+else
+	# "diff" mode:
+	if [[ ! -z $mode && $mode == "-d" ]]; then
+		arg=$2
+		archive_to_test=$3
+		echo "Finding the TP $arg directory..."
+		tp_dir=$(cat $config_path | grep "!$arg=" | cut -d'=' -f2)
+
+		# if is .java file
+		if  [[ ! -z $archive_to_test && ${archive_to_test: -5} == ".java" ]]; then
+			echo "Compiling the java file..."
+			javac $archive_to_test > .tpman_buffer.txt
+
+			# throw error if the compiler give a out msg
+			if [ -s .tpman_buffer.txt ]; then
+				echo "Compiler throw error"
+				cat .tpman_buffer.txt
+
+				#removing the garbage
+				rm -f ${archive_to_test}.class
+				rm -f .tpman_buffer.txt
+			else
+				# make the diff
+				echo "Making the diff: "
+				java ${archive_to_test} < "$tp_dir/pub.in" > pub_buffer.out
+				diff pub_buffer.out "$tp_dir/pub.out"
+
+				# removing the garbage
+				rm -f ${archive_to_test}.class
+				rm -f pub_buffer.out
+				rm -f .tpman_buffer.txt
+			fi
+		else 
+			# if is a .c file
+			if [[ ! -z $archive_to_test && ${archive_to_test: -2} == ".c" ]]; then
+				echo "Compiling the C file..."
+				gcc -o ${archive_to_test: -2} $archive_to_test 2> .tpman_buffer_aux.txt
+				cat .tpman_buffer_aux.txt | grep "error:" > .tpman_buffer.txt
+				rm -f .tpman_buffer_aux.txt
+
+				# throw error if the compile give a error
+				if [ -s .tpman_buffer.txt ]; then
+					echo "Compiler throw error!"
+					cat .tpman_buffer.txt
+
+					#removing the garbage
+					rm -f ${archive_to_test: -2}
+					rm -f .tpman_buffer.txt
+				else
+					# make the diff
+					echo "Making the diff: "
+					./${archive_to_test: -2} < "$tp_dir/pub.in" > pub_buffer.out
+					diff pub_buffer.out "$tpdir/pub.out"
+
+					# removing the garbage
+					rm -f ${archive_to_test: -2}
+					rm -f pub_buffer.out
+					rm -f .tpman_buffer.txt	
+				fi
+			fi
+		fi
+	else
+		echo "error: Invalid command"
+		echo "Usage:"
+		echo "tpman -r [TP_ROOT_DIRECTORY] -> configure your TPs root directory"
+		echo "tpman -d [TP_TO_ANALYSE_NUMBER] [FILE_TO_DIFF] -> diff your file with expected out"
+	fi
+fi
