@@ -10,7 +10,7 @@ tpman -r [ROOT_DIRECTORY]
 ```
 example:
 ```
-tpman -f ~/Documents/aed2/expectedInOut/block1
+tpman -r ~/Documents/aed2/expectedInOut/block1
 ```
 For make a diff with your file and expected out. The script recognize if the file is .c or .java, compile the file, and diff with exercise directory.
 ```
