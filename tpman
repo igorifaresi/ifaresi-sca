@@ -15,7 +15,7 @@ if [[ ! -z $mode && $mode == "-r" ]]; then
 		IFS=$'\n'
 		for i in $root_path_subdirs; do
 			# getting the TPs subdirectories and write on config file
-			echo "!$j=${root_path}/'$i'" >> $config_path
+			echo "!$j=${root_path}/$i" >> $config_path
 			j=$(( $j+1 ))
 		done
 	fi
@@ -71,7 +71,7 @@ else
 					# make the diff
 					echo "Making the diff: "
 					./${archive_to_test: -2} < "$tp_dir/pub.in" > pub_buffer.out
-					diff pub_buffer.out "$tpdir/pub.out"
+					diff pub_buffer.out "$tp_dir/pub.out"
 
 					# removing the garbage
 					rm -f ${archive_to_test: -2}
