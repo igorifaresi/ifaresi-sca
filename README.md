@@ -24,7 +24,7 @@ tpman -d 4 ex04.java
 ## TruthTableGen
 A program for generate truth tables.
 ### usage
-Create a `TruthTableGen` object and gives to constructor the std::vector of (bool)(std::vector<bool>) functions, the std::vector of functions name, and the var qnt (1 to 4).
+Create a `TruthTableGen` object and gives to constructor the std::vector of (bool)(std::vector\<bool\>) functions, the std::vector of functions name, and the var qnt (1 to 4). The function `generate()` gives the truth table std::string.
 ```cpp
 bool my_func(std::vector<bool> b)
 {
