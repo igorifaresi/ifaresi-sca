@@ -4,7 +4,7 @@ Ifaresi's Simple Cool Applications.
 ## tpman
 A script to manage my CS exercises.
 ### usage
-For configure your root exercises directory. The script scans the number of subdirectories and create a config file (for default this config file is on ~/.tpmanrc ) and each exercise expected `pub.out` and default `pub.in` have to be inside each subdirectory.
+For configure your root exercises directory, the script scans the number of subdirectories and create a config file (for default this config file is on ~/.tpmanrc ) and each exercise expected `pub.out` and default `pub.in` have to be inside each subdirectory.
 ```
 tpman -r [ROOT_DIRECTORY]
 ```
@@ -22,7 +22,7 @@ tpman -d 4 ex04.java
 ```
 
 ## TruthTableGen
-A program for generate truth tables.
+A library for generate truth tables.
 ### usage
 Create a `TruthTableGen` object and gives to constructor the std::vector of (bool)(std::vector\<bool\>) functions, the std::vector of functions name, and the var qnt (1 to 4). The function `generate()` gives the truth table std::string.
 ```cpp
